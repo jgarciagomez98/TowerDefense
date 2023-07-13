@@ -2,8 +2,11 @@
 
 
 #include "Test_MapGenerator.h"
+#include "DrawDebugHelpers.h"
 
 #include <string>
+
+#include "Engine/StaticMeshActor.h"
 
 // Sets default values
 ATest_MapGenerator::ATest_MapGenerator()
@@ -17,6 +20,7 @@ void ATest_MapGenerator::BeginPlay()
 {
 	Super::BeginPlay();
 	GetInfoFromDataTable();
+	GenerateGrid();
 }
 
 // Called every frame
@@ -38,7 +42,31 @@ void ATest_MapGenerator::GetInfoFromDataTable()
 		
 		if (!TestTilesArray.IsEmpty())
 		{
-			UE_LOG(LogTemp, Log, TEXT("Founded tile name is: %s"), *TestTilesArray[3].TileName.ToString());
+			UE_LOG(LogTemp, Log, TEXT("Founded tile name is: %s"), *TestTilesArray[2].TileName.ToString());
 		}
+	}
+}
+
+void ATest_MapGenerator::GenerateGrid()
+{
+	for (int i = 0; i < 5; i++)
+	{
+		for (int j = 0; j < 5; j++)
+		{
+			FVector DebugBoxLocation = FVector(GetActorLocation().X + i * 200, GetActorLocation().Y + j * 200, GetActorLocation().Z);
+			DrawDebugBox(GetWorld(), DebugBoxLocation, FVector(100, 100, 100), FColor::Red, true, -1, 0, 2);
+			SpawnStaticMeshActors(DebugBoxLocation);
+		}
+	}
+}
+
+void ATest_MapGenerator::SpawnStaticMeshActors(const FVector& Location) const
+{
+	AStaticMeshActor* NewActor = GetWorld()->SpawnActor<AStaticMeshActor>(AStaticMeshActor::StaticClass());
+	NewActor->SetMobility(EComponentMobility::Movable);
+	NewActor->SetActorLocation(Location);
+	if (UStaticMeshComponent* MeshComponent = NewActor->GetStaticMeshComponent())
+	{
+		MeshComponent->SetStaticMesh(TestTilesArray[FMath::RandRange(0, TestTilesArray.Num() - 1)].TileMesh);
 	}
 }

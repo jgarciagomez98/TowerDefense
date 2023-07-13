@@ -31,9 +31,6 @@ public:
 	// Sets default values for this actor's properties
 	ATest_MapGenerator();
 
-	UPROPERTY(VisibleAnywhere)
-	FTiles TileStruct;
-
 	//TODO: Test variables
 	UPROPERTY(EditAnywhere)
 	UDataTable* TestTileDataTable;
@@ -49,5 +46,9 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	void GetInfoFromDataTable();
+
+	void GenerateGrid();
+
+	void SpawnStaticMeshActors(const FVector& Location) const;
 
 };
