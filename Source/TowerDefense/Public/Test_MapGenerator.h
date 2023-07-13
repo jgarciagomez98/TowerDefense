@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Engine/DataTable.h"
 #include "GameFramework/Actor.h"
+#include "Math/Vector2D.h"
 #include "Test_MapGenerator.generated.h"
 
 USTRUCT(BlueprintType)
@@ -22,6 +23,24 @@ struct FTiles : public FTableRowBase
 	FTiles(): TileID(0), TileName(""), TileMesh(nullptr){}
 };
 
+USTRUCT(BlueprintType)
+struct FSlots
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TArray<FTiles> Tiles;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FVector SlotLocation;
+
+	FSlots(){}
+	FSlots(TArray<FTiles> Tiles, FVector SlotLocation)
+	{
+		this->Tiles = Tiles;
+		this->SlotLocation = SlotLocation;
+	}
+};
+
 UCLASS()
 class TOWERDEFENSE_API ATest_MapGenerator : public AActor
 {
@@ -35,6 +54,12 @@ public:
 	UPROPERTY(EditAnywhere)
 	UDataTable* TestTileDataTable;
 	UPROPERTY(VisibleAnywhere)
+	TArray<FSlots> TestSlotsArray;
+	UPROPERTY(EditAnywhere)
+	FIntVector2 GridSize;
+	UPROPERTY(EditAnywhere)
+	bool ShowDebugBox;
+
 	TArray<FTiles> TestTilesArray;
 
 protected:
@@ -50,5 +75,9 @@ public:
 	void GenerateGrid();
 
 	void SpawnStaticMeshActors(const FVector& Location) const;
+
+	void SpawnStaticMeshActors(const FVector& Location, const FTiles& SelectedTile) const;
+
+	void CollapseSlot();
 
 };
