@@ -3,9 +3,6 @@
 
 #include "Test_MapGenerator.h"
 #include "DrawDebugHelpers.h"
-
-#include <string>
-
 #include "Engine/StaticMeshActor.h"
 
 // Sets default values
@@ -25,7 +22,8 @@ void ATest_MapGenerator::BeginPlay()
 	GetInfoFromDataTable();
 	GenerateGrid();
 	//TODO: Collapse ONE random slot for test
-	CollapseSlot();
+	// CollapseSlot();
+	CollapseGrid();
 }
 
 // Called every frame
@@ -40,14 +38,14 @@ void ATest_MapGenerator::GetInfoFromDataTable()
 	{
 		TArray<FTiles*> tiles;
 		TestTileDataTable->GetAllRows("", tiles);
-		for (const FTiles* Tile : tiles)
+		for (FTiles* Tile : tiles)
 		{
-			TestTilesArray.Add(*Tile);
+			TestTilesArray.Add(Tile);
 		}
 		
 		if (!TestTilesArray.IsEmpty())
 		{
-			UE_LOG(LogTemp, Log, TEXT("Founded tile name is: %s"), *TestTilesArray[2].TileName.ToString());
+			UE_LOG(LogTemp, Log, TEXT("Founded tile name is: %s"), *TestTilesArray[2]->TileName.ToString());
 		}
 	}
 }
@@ -65,7 +63,7 @@ void ATest_MapGenerator::GenerateGrid()
 				DrawDebugBox(GetWorld(), DebugBoxLocation, FVector(100, 100, 100), FColor::Red, true, -1, 0, 2);
 			}
 			//Add slots to grid
-			TestSlotsArray.Add(FSlots(TestTilesArray, DebugBoxLocation));
+			TestSlotsArray.Add(new FSlots(TestTilesArray, DebugBoxLocation));
 		}
 	}
 }
@@ -77,7 +75,7 @@ void ATest_MapGenerator::SpawnStaticMeshActors(const FVector& Location) const
 	NewActor->SetActorLocation(Location);
 	if (UStaticMeshComponent* MeshComponent = NewActor->GetStaticMeshComponent())
 	{
-		MeshComponent->SetStaticMesh(TestTilesArray[FMath::RandRange(0, TestTilesArray.Num() - 1)].TileMesh);
+		MeshComponent->SetStaticMesh(TestTilesArray[FMath::RandRange(0, TestTilesArray.Num() - 1)]->TileMesh);
 	}
 }
 
@@ -94,18 +92,23 @@ void ATest_MapGenerator::SpawnStaticMeshActors(const FVector& Location, const FT
 
 void ATest_MapGenerator::CollapseSlot()
 {
-	FSlots SelectedSlotToCollapse = TestSlotsArray[FMath::RandRange(0, TestSlotsArray.Num() - 1)];
-	FTiles SelectedTile = SelectedSlotToCollapse.Tiles[FMath::RandRange(0, SelectedSlotToCollapse.Tiles.Num() - 1)];
-	SpawnStaticMeshActors(SelectedSlotToCollapse.SlotLocation, SelectedTile);
-	//Remove all non selected tiles
-	SelectedSlotToCollapse.Tiles.Remove(SelectedTile);
-	// TArray<FTiles> AuxArray = SelectedSlotToCollapse.Tiles;
-	//
-	// for (FTiles Element : AuxArray)
-	// {
-	// 	if (Element.TileID != SelectedTile.TileID)
-	// 	{
-	// 		SelectedSlotToCollapse.Tiles.RemoveSwap(Element);
-	// 	}
-	// }
+	FSlots* SelectedSlotToCollapse = TestSlotsArray[FMath::RandRange(0, TestSlotsArray.Num() - 1)];
+	const FTiles SelectedTile = *SelectedSlotToCollapse->Tiles[FMath::RandRange(0, SelectedSlotToCollapse->Tiles.Num() - 1)];
+	SpawnStaticMeshActors(SelectedSlotToCollapse->SlotLocation, SelectedTile);
+	
+	//Set the collapsed tile and remove all possibilities from tile array
+	SelectedSlotToCollapse->CollapsedTile = SelectedTile;
+	SelectedSlotToCollapse->Tiles.Empty();
+	
+	//Add slot to collapsed slot array and remove from collapsable slots
+	CollapsedSlotsArray.Add(SelectedSlotToCollapse);
+	TestSlotsArray.Remove(SelectedSlotToCollapse);
+}
+
+void ATest_MapGenerator::CollapseGrid()
+{
+	while (!TestSlotsArray.IsEmpty())
+	{
+		CollapseSlot();
+	}
 }

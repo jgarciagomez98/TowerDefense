@@ -27,14 +27,16 @@ USTRUCT(BlueprintType)
 struct FSlots
 {
 	GENERATED_BODY()
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TArray<FTiles> Tiles;
+	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FVector SlotLocation;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FTiles CollapsedTile;
+	TArray<FTiles*> Tiles;
+	
 
 	FSlots(){}
-	FSlots(TArray<FTiles> Tiles, FVector SlotLocation)
+	FSlots(const TArray<FTiles*>& Tiles, FVector SlotLocation)
 	{
 		this->Tiles = Tiles;
 		this->SlotLocation = SlotLocation;
@@ -53,14 +55,14 @@ public:
 	//TODO: Test variables
 	UPROPERTY(EditAnywhere)
 	UDataTable* TestTileDataTable;
-	UPROPERTY(VisibleAnywhere)
-	TArray<FSlots> TestSlotsArray;
 	UPROPERTY(EditAnywhere)
 	FIntVector2 GridSize;
 	UPROPERTY(EditAnywhere)
 	bool ShowDebugBox;
 
-	TArray<FTiles> TestTilesArray;
+	TArray<FTiles*> TestTilesArray;
+	TArray<FSlots*> TestSlotsArray;
+	TArray<FSlots*> CollapsedSlotsArray;
 
 protected:
 	// Called when the game starts or when spawned
@@ -80,4 +82,5 @@ public:
 
 	void CollapseSlot();
 
+	void CollapseGrid();
 };
