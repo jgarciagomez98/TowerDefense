@@ -13,6 +13,7 @@ ATest_MapGenerator::ATest_MapGenerator()
 
 	GridSize = FIntVector2(5, 5);
 	ShowDebugBox = false;
+	
 }
 
 // Called when the game starts or when spawned
@@ -22,8 +23,8 @@ void ATest_MapGenerator::BeginPlay()
 	GetInfoFromDataTable();
 	GenerateGrid();
 	//TODO: Collapse ONE random slot for test
-	// CollapseSlot();
-	CollapseGrid();
+	CollapseSlot();
+	// CollapseGrid();
 }
 
 // Called every frame
@@ -64,6 +65,9 @@ void ATest_MapGenerator::GenerateGrid()
 			}
 			//Add slots to grid
 			TestSlotsArray.Add(new FSlots(TestTilesArray, DebugBoxLocation));
+
+			//Add debug text from all possible tiles in each slot
+			DebugRenderText(FString::FromInt(TestTilesArray.Num()),FVector(DebugBoxLocation.X, DebugBoxLocation.Y, DebugBoxLocation.Z + 100));
 		}
 	}
 }
@@ -92,7 +96,9 @@ void ATest_MapGenerator::SpawnStaticMeshActors(const FVector& Location, const FT
 
 void ATest_MapGenerator::CollapseSlot()
 {
-	FSlots* SelectedSlotToCollapse = TestSlotsArray[FMath::RandRange(0, TestSlotsArray.Num() - 1)];
+	const uint8 SelectedSlotIndex = FMath::RandRange(0, TestSlotsArray.Num() - 1);
+	
+	FSlots* SelectedSlotToCollapse = TestSlotsArray[SelectedSlotIndex];
 	const FTiles SelectedTile = *SelectedSlotToCollapse->Tiles[FMath::RandRange(0, SelectedSlotToCollapse->Tiles.Num() - 1)];
 	SpawnStaticMeshActors(SelectedSlotToCollapse->SlotLocation, SelectedTile);
 	
@@ -103,6 +109,10 @@ void ATest_MapGenerator::CollapseSlot()
 	//Add slot to collapsed slot array and remove from collapsable slots
 	CollapsedSlotsArray.Add(SelectedSlotToCollapse);
 	TestSlotsArray.Remove(SelectedSlotToCollapse);
+
+	//Change debug text render to collapsed slot
+	DebugTextRenderArray[SelectedSlotIndex]->GetTextRender()->SetText(FText::FromString(FString::FromInt(SelectedSlotToCollapse->Tiles.Num())));
+	
 }
 
 void ATest_MapGenerator::CollapseGrid()
@@ -111,4 +121,14 @@ void ATest_MapGenerator::CollapseGrid()
 	{
 		CollapseSlot();
 	}
+}
+
+void ATest_MapGenerator::DebugRenderText(const FString& Text, const FVector Location)
+{
+	ATextRenderActor* PossibleTilesText = GetWorld()->SpawnActor<ATextRenderActor>(ATextRenderActor::StaticClass(), Location, FRotator(90.f, 180.f, 0.f));
+	PossibleTilesText->GetTextRender()->SetText(FText::FromString(Text));
+	PossibleTilesText->GetTextRender()->SetTextRenderColor(FColor::White);
+	PossibleTilesText->SetActorScale3D(FVector(2.f, 2.f, 2.f));
+
+	DebugTextRenderArray.Add(PossibleTilesText);
 }

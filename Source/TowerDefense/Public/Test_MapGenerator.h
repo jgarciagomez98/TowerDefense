@@ -3,7 +3,9 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Components/TextRenderComponent.h"
 #include "Engine/DataTable.h"
+#include "Engine/TextRenderActor.h"
 #include "GameFramework/Actor.h"
 #include "Math/Vector2D.h"
 #include "Test_MapGenerator.generated.h"
@@ -64,6 +66,8 @@ public:
 	TArray<FSlots*> TestSlotsArray;
 	TArray<FSlots*> CollapsedSlotsArray;
 
+	TArray<ATextRenderActor*> DebugTextRenderArray;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -83,4 +87,6 @@ public:
 	void CollapseSlot();
 
 	void CollapseGrid();
+
+	void DebugRenderText(const FString& Text, const FVector Location);
 };
