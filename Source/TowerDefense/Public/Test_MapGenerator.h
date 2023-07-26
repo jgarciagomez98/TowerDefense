@@ -21,8 +21,16 @@ struct FTiles : public FTableRowBase
 	FName TileName;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UStaticMesh* TileMesh;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool HaveRotationVariants;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int32 RotationVariants;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TArray<FString> Sockets;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TArray<FString> ValidNeighbours;
 
-	FTiles(): TileID(0), TileName(""), TileMesh(nullptr){}
+	FTiles(): TileID(0), TileName(""), TileMesh(nullptr), HaveRotationVariants(false), RotationVariants(0){}
 };
 
 USTRUCT(BlueprintType)
@@ -35,15 +43,25 @@ struct FSlots
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FTiles CollapsedTile;
 	TArray<FTiles*> Tiles;
+	FIntPoint GridIndex;
+	bool SlotCollapsed;
 	
 
-	FSlots(){}
-	FSlots(const TArray<FTiles*>& Tiles, FVector SlotLocation)
+	FSlots(): GridIndex(), SlotCollapsed(false)
+	{
+	}
+
+	FSlots(const TArray<FTiles*>& Tiles, const FVector& SlotLocation, const FIntPoint& GridIndex, const bool SlotCollapsed = false)
 	{
 		this->Tiles = Tiles;
 		this->SlotLocation = SlotLocation;
+		this->GridIndex = GridIndex;
+		this->SlotCollapsed = SlotCollapsed;
 	}
 };
+
+UENUM(BlueprintType)
+enum EDirectionSockets { POSX, NEGX, POSY, NEGY };
 
 UCLASS()
 class TOWERDEFENSE_API ATest_MapGenerator : public AActor
@@ -88,5 +106,11 @@ public:
 
 	void CollapseGrid();
 
-	void DebugRenderText(const FString& Text, const FVector Location);
+	void DebugRenderText(const FString& Text, const FVector Location, FColor Color);
+
+	void PropagateCollapsedSlotSelection(FSlots* CollapsedSlot);
+
+	void RemoveInvalidPossibilitiesFromNeighbourSlot(FSlots* CollapsedSlot, FSlots* NeighbourSlot, EDirectionSockets DirectionSockets);
+
+	FSlots* GetFoundSlot(const FIntPoint& IndexInGrid);
 };

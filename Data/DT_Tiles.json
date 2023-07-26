@@ -1,0 +1,77 @@
+[
+	{
+		"Name": "BlankTile",
+		"TileID": 0,
+		"TileName": "Blank",
+		"TileMesh": "/Script/Engine.StaticMesh'/Game/Mesh/Blank_Tile.Blank_Tile'",
+		"HaveRotationVariants": false,
+		"RotationVariants": 0,
+		"Sockets": [
+			"0",
+			"0",
+			"0",
+			"0"
+		],
+		"ValidNeighbours": []
+	},
+	{
+		"Name": "PosXTile",
+		"TileID": 1,
+		"TileName": "PosX",
+		"TileMesh": "/Script/Engine.StaticMesh'/Game/Mesh/PosX_Tile.PosX_Tile'",
+		"HaveRotationVariants": false,
+		"RotationVariants": 0,
+		"Sockets": [
+			"1",
+			"1",
+			"0",
+			"1"
+		],
+		"ValidNeighbours": []
+	},
+	{
+		"Name": "NegXTile",
+		"TileID": 2,
+		"TileName": "NegX",
+		"TileMesh": "/Script/Engine.StaticMesh'/Game/Mesh/NegX_Tile.NegX_Tile'",
+		"HaveRotationVariants": false,
+		"RotationVariants": 0,
+		"Sockets": [
+			"0",
+			"1",
+			"1",
+			"1"
+		],
+		"ValidNeighbours": []
+	},
+	{
+		"Name": "PosYTile",
+		"TileID": 3,
+		"TileName": "PosY",
+		"TileMesh": "/Script/Engine.StaticMesh'/Game/Mesh/PosY_Tile.PosY_Tile'",
+		"HaveRotationVariants": false,
+		"RotationVariants": 0,
+		"Sockets": [
+			"1",
+			"0",
+			"1",
+			"1"
+		],
+		"ValidNeighbours": []
+	},
+	{
+		"Name": "NegYTile",
+		"TileID": 4,
+		"TileName": "NegY",
+		"TileMesh": "/Script/Engine.StaticMesh'/Game/Mesh/NegY_Tile.NegY_Tile'",
+		"HaveRotationVariants": false,
+		"RotationVariants": 0,
+		"Sockets": [
+			"1",
+			"1",
+			"1",
+			"0"
+		],
+		"ValidNeighbours": []
+	}
+]
