@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "FTileStruct.h"
 #include "GameFramework/Actor.h"
 #include "Test_CellActor.generated.h"
 
@@ -14,7 +15,12 @@ class TOWERDEFENSE_API ATest_CellActor : public AActor
 public:	
 	// Sets default values for this actor's properties
 	ATest_CellActor();
+	
+	TArray<FTileStruct*> TilesArray;
 
+private:
+	UDataTable* TileDataTable;
+	
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -24,5 +30,14 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	void DrawDebugBoxHelper(const FVector& DebugBoxSize) const;
+
+	void SetTileDataTable(UDataTable* DataTable);
+
+	void InitializeCell();
+
+	void InitializeCell(const UDataTable* DataTable);
+
+private:
+	static TArray<FTileStruct*> GetTileDataFromDataTable(const UDataTable* DataTable);
 
 };

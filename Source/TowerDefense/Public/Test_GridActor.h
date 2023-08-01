@@ -19,6 +19,8 @@ public:
 	FIntPoint GridSize;
 	UPROPERTY(EditAnywhere, Category="Grid Generation")
 	TSubclassOf<AActor> ActorToSpawn;
+	UPROPERTY(EditAnywhere, Category="Grid Generation")
+	UDataTable* TileDataTable;
 	
 	//Debug variables
 	UPROPERTY(EditAnywhere, Category="Grid Generation")
@@ -28,7 +30,6 @@ public:
 
 private:
 	TArray<ATest_CellActor*> CellActorsArray;
-
 
 protected:
 	// Called when the game starts or when spawned

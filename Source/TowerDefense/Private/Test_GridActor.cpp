@@ -53,14 +53,21 @@ void ATest_GridActor::SpawnCells()
 			{
 				//Spawn cell actor
 				FVector CellLocation = FVector(GetActorLocation().X + i  * (CellSize.X * 2), GetActorLocation().Y + j * (CellSize.Y * 2), GetActorLocation().Z);
-				if (AActor* NewCell = GetWorld()->SpawnActor<AActor>(ActorToSpawn, CellLocation, FRotator(0.f,0.f,0.f)))
+				if (AActor* NewActor = GetWorld()->SpawnActor<AActor>(ActorToSpawn, CellLocation, FRotator(0.f,0.f,0.f)))
 				{
+					ATest_CellActor* NewCell = Cast<ATest_CellActor>(NewActor);
+					NewCell->InitializeCell(TileDataTable);
+					
 					if (ShowDebugBox)
 					{
-						Cast<ATest_CellActor>(NewCell)->DrawDebugBoxHelper(CellSize);
+						NewCell->DrawDebugBoxHelper(CellSize);
 					}
 					//Add cell to array
-					CellActorsArray.Add(Cast<ATest_CellActor>(NewCell));
+					CellActorsArray.Add(NewCell);
+				}
+				else
+				{
+					UE_LOG(LogTemp, Error, TEXT("The new cell to spawn is not created"));
 				}
 			}
 		}	
