@@ -38,6 +38,7 @@ public:
 	void InitializeCell(const UDataTable* DataTable);
 
 private:
-	static TArray<FTileStruct*> GetTileDataFromDataTable(const UDataTable* DataTable);
+	TArray<FTileStruct*> GetTileDataFromDataTable(const UDataTable* DataTable);
 
+	void SpawnStaticMeshActors(const FVector& Location, const FTileStruct& Tile) const;
 };

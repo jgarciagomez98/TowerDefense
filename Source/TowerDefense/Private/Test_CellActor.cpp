@@ -3,7 +3,7 @@
 
 #include "Test_CellActor.h"
 #include "DrawDebugHelpers.h"
-#include "WorldPartition/ContentBundle/ContentBundleLog.h"
+#include "Engine/StaticMeshActor.h"
 
 // Sets default values
 ATest_CellActor::ATest_CellActor()
@@ -47,7 +47,14 @@ void ATest_CellActor::InitializeCell(const UDataTable* DataTable)
 {
 	if (DataTable != nullptr)
 	{
+		int it = 0;
 		TilesArray = GetTileDataFromDataTable(DataTable);
+		for (const FTileStruct* Tile : TilesArray)
+		{
+			FVector Location = FVector(GetActorLocation().X, GetActorLocation().Y, GetActorLocation().Z + it * 200);
+			SpawnStaticMeshActors(Location, *Tile);
+			it++;
+		}
 	}
 	else
 	{
@@ -60,5 +67,16 @@ TArray<FTileStruct*> ATest_CellActor::GetTileDataFromDataTable(const UDataTable*
 	TArray<FTileStruct*> Tiles;
 	DataTable->GetAllRows("", Tiles);
 	return Tiles;
+}
+
+void ATest_CellActor::SpawnStaticMeshActors(const FVector& Location, const FTileStruct& Tile) const
+{
+	AStaticMeshActor* NewMeshActor = GetWorld()->SpawnActor<AStaticMeshActor>(AStaticMeshActor::StaticClass());
+	NewMeshActor->SetMobility(EComponentMobility::Movable);
+	NewMeshActor->SetActorLocation(Location);
+	if (UStaticMeshComponent* MeshComponent = NewMeshActor->GetStaticMeshComponent())
+	{
+		MeshComponent->SetStaticMesh(Tile.Mesh);
+	}
 }
 
