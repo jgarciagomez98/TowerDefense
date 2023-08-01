@@ -4,21 +4,16 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "Test_TileActor.generated.h"
+#include "Test_CellActor.generated.h"
 
 UCLASS()
-class TOWERDEFENSE_API ATest_TileActor : public AActor
+class TOWERDEFENSE_API ATest_CellActor : public AActor
 {
 	GENERATED_BODY()
 	
 public:	
 	// Sets default values for this actor's properties
-	ATest_TileActor();
-
-	UPROPERTY(EditAnywhere)
-	UStaticMeshComponent* TileMesh;
-	UPROPERTY(VisibleAnywhere)
-	TArray<FString> Sockets;
+	ATest_CellActor();
 
 protected:
 	// Called when the game starts or when spawned
@@ -27,5 +22,7 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
+	void DrawDebugBoxHelper(const FVector& DebugBoxSize) const;
 
 };
