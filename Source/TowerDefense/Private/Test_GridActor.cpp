@@ -43,6 +43,15 @@ void ATest_GridActor::RemoveGrid()
 	ClearData();
 }
 
+void ATest_GridActor::CollapseCells()
+{
+	if (!CellActorsArray.IsEmpty())
+	{
+		const uint8 Index = FMath::RandRange(0, CellActorsArray.Num() - 1);
+		CellActorsArray[Index]->CollapseCell();
+	}
+}
+
 void ATest_GridActor::SpawnCells()
 {
 	if (ActorToSpawn != nullptr)

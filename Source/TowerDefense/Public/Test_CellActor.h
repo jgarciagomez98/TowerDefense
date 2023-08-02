@@ -8,6 +8,22 @@
 #include "GameFramework/Actor.h"
 #include "Test_CellActor.generated.h"
 
+USTRUCT(BlueprintType)
+struct FDebugTile
+{
+	GENERATED_BODY()
+
+	int32 ID;
+	AStaticMeshActor* StaticMeshActor;
+
+	FDebugTile(): ID(0), StaticMeshActor(){}
+	FDebugTile(int32 ID, AStaticMeshActor* StaticMeshActor)
+	{
+		this->ID = ID;
+		this->StaticMeshActor = StaticMeshActor;
+	} 
+};
+
 UCLASS()
 class TOWERDEFENSE_API ATest_CellActor : public AActor
 {
@@ -18,7 +34,7 @@ public:
 	ATest_CellActor();
 	
 	TArray<FTileStruct*> TilesArray;
-	TArray<AStaticMeshActor*> TilesMeshActorArray;
+	TArray<FDebugTile*> TilesMeshActorArray;
 
 private:
 	UDataTable* TileDataTable;
@@ -40,6 +56,8 @@ public:
 	void InitializeCell(const UDataTable* DataTable);
 
 	void ClearAllSpawnedTiles();
+
+	void CollapseCell();
 
 private:
 	TArray<FTileStruct*> GetTileDataFromDataTable(const UDataTable* DataTable);

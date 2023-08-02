@@ -64,13 +64,40 @@ void ATest_CellActor::InitializeCell(const UDataTable* DataTable)
 
 void ATest_CellActor::ClearAllSpawnedTiles()
 {
-	for (AStaticMeshActor* TileMesh : TilesMeshActorArray)
+	for (const FDebugTile* DebugTile : TilesMeshActorArray)
 	{
-		TileMesh->Destroy();
+		DebugTile->StaticMeshActor->Destroy();
 	}
 	//Clear all the array data 
 	TilesMeshActorArray.Empty();
 	TilesArray.Empty();
+}
+
+void ATest_CellActor::CollapseCell()
+{
+	//Remove the unselected tiles from array
+	const FTileStruct* SelectedTile = TilesArray[FMath::RandRange(0, TilesArray.Num() - 1)];
+	TArray<FTileStruct*> TempArray;
+	for (FTileStruct* Tile : TilesArray)
+	{
+		if (Tile == SelectedTile)
+		{
+			TempArray.Add(Tile);
+			break;
+		}
+	}
+	TilesArray = TempArray;
+
+	//Remove unselected spawned tiles
+	for (FDebugTile* TilesMeshActor : TilesMeshActorArray)
+	{
+		if (TilesMeshActor->ID != SelectedTile->ID)
+		{
+			TilesMeshActor->StaticMeshActor->Destroy();
+			// TilesMeshActorArray.Remove(TilesMeshActor);
+		}
+	}
+	
 }
 
 TArray<FTileStruct*> ATest_CellActor::GetTileDataFromDataTable(const UDataTable* DataTable)
@@ -90,6 +117,6 @@ void ATest_CellActor::SpawnStaticMeshActors(const FVector& Location, const FTile
 		MeshComponent->SetStaticMesh(Tile.Mesh);
 	}
 	//Add new spawned mesh actor to array
-	TilesMeshActorArray.Add(NewMeshActor);
+	TilesMeshActorArray.Add(new FDebugTile(Tile.ID, NewMeshActor));
 }
 

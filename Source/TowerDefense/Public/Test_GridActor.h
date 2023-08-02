@@ -43,6 +43,8 @@ public:
 	void GenerateGrid();
 	UFUNCTION(CallInEditor, Category="Grid Generation")
 	void RemoveGrid();
+	UFUNCTION(CallInEditor, Category="Grid Generation")
+	void CollapseCells();
 
 private:
 
