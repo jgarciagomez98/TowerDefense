@@ -62,6 +62,17 @@ void ATest_CellActor::InitializeCell(const UDataTable* DataTable)
 	}
 }
 
+void ATest_CellActor::ClearAllSpawnedTiles()
+{
+	for (AStaticMeshActor* TileMesh : TilesMeshActorArray)
+	{
+		TileMesh->Destroy();
+	}
+	//Clear all the array data 
+	TilesMeshActorArray.Empty();
+	TilesArray.Empty();
+}
+
 TArray<FTileStruct*> ATest_CellActor::GetTileDataFromDataTable(const UDataTable* DataTable)
 {
 	TArray<FTileStruct*> Tiles;
@@ -69,7 +80,7 @@ TArray<FTileStruct*> ATest_CellActor::GetTileDataFromDataTable(const UDataTable*
 	return Tiles;
 }
 
-void ATest_CellActor::SpawnStaticMeshActors(const FVector& Location, const FTileStruct& Tile) const
+void ATest_CellActor::SpawnStaticMeshActors(const FVector& Location, const FTileStruct& Tile)
 {
 	AStaticMeshActor* NewMeshActor = GetWorld()->SpawnActor<AStaticMeshActor>(AStaticMeshActor::StaticClass());
 	NewMeshActor->SetMobility(EComponentMobility::Movable);
@@ -78,5 +89,7 @@ void ATest_CellActor::SpawnStaticMeshActors(const FVector& Location, const FTile
 	{
 		MeshComponent->SetStaticMesh(Tile.Mesh);
 	}
+	//Add new spawned mesh actor to array
+	TilesMeshActorArray.Add(NewMeshActor);
 }
 

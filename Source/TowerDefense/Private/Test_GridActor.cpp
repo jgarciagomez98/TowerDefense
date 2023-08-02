@@ -80,12 +80,9 @@ void ATest_GridActor::SpawnCells()
 
 void ATest_GridActor::ClearData()
 {
-	if (ShowDebugBox)
-	{
-		//Remove debug draw helpers
-		FlushPersistentDebugLines(GetWorld());
-	}
-
+	//Remove debug draw helpers
+	FlushPersistentDebugLines(GetWorld());
+	
 	//Clear Cells array
 	RemoveAllCellsFromWorld();
 	CellActorsArray.Empty();
@@ -95,6 +92,7 @@ void ATest_GridActor::RemoveAllCellsFromWorld()
 {
 	for (ATest_CellActor* Cell : CellActorsArray)
 	{
+		Cell->ClearAllSpawnedTiles();
 		Cell->Destroy();
 	}
 }

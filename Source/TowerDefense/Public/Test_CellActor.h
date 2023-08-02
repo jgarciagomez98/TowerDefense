@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "FTileStruct.h"
+#include "Engine/StaticMeshActor.h"
 #include "GameFramework/Actor.h"
 #include "Test_CellActor.generated.h"
 
@@ -17,6 +18,7 @@ public:
 	ATest_CellActor();
 	
 	TArray<FTileStruct*> TilesArray;
+	TArray<AStaticMeshActor*> TilesMeshActorArray;
 
 private:
 	UDataTable* TileDataTable;
@@ -37,8 +39,10 @@ public:
 
 	void InitializeCell(const UDataTable* DataTable);
 
+	void ClearAllSpawnedTiles();
+
 private:
 	TArray<FTileStruct*> GetTileDataFromDataTable(const UDataTable* DataTable);
 
-	void SpawnStaticMeshActors(const FVector& Location, const FTileStruct& Tile) const;
+	void SpawnStaticMeshActors(const FVector& Location, const FTileStruct& Tile);
 };
