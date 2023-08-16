@@ -45,27 +45,46 @@ void ATest_GridActor::RemoveGrid()
 
 void ATest_GridActor::CollapseAllCells()
 {
-	//TODO: Make loop for collapse all cells
-}
-
-void ATest_GridActor::CollapseOneCells()
-{
+	TArray<ATest_CellActor*> TempArray = UnCollapsedCellActorsArray;
 	if (!UnCollapsedCellActorsArray.IsEmpty())
 	{
-		//Find random cell and collapse
-		const uint8 Index = FMath::RandRange(0, UnCollapsedCellActorsArray.Num() - 1);
-		UnCollapsedCellActorsArray[Index]->CollapseCell();
-
-		//Add collapsed cell to CollapsedCellActorsArray
-		CollapsedCellActorsArray.Add(UnCollapsedCellActorsArray[Index]);
-
-		//Remove collapsed cell from UnCollapsedCellActorsArray
-		UnCollapsedCellActorsArray.RemoveAt(Index);
+		for (int i = 0; i < TempArray.Num(); i++)
+		{
+			CollapseOneCell();
+		}
 	}
 	else
 	{
 		UE_LOG(LogTemp, Log, TEXT("All cells are collapsed"));
 	}
+	
+	TempArray.Empty();
+}
+
+void ATest_GridActor::CollapseOneCell()
+{
+	if (!UnCollapsedCellActorsArray.IsEmpty())
+	{
+		//Find random cell and collapse
+		const uint8 Index = FMath::RandRange(0, UnCollapsedCellActorsArray.Num() - 1);
+		CollapseCell(UnCollapsedCellActorsArray[Index]);
+	}
+	else
+	{
+		UE_LOG(LogTemp, Log, TEXT("All cells are collapsed"));
+	}
+}
+
+void ATest_GridActor::CollapseCell(ATest_CellActor* Cell)
+{
+	//Collapse cell
+	Cell->CollapseCell();
+	
+	//Add collapsed cell to CollapsedCellActorsArray
+	CollapsedCellActorsArray.Add(Cell);
+
+	//Remove collapsed cell from UnCollapsedCellActorsArray
+	UnCollapsedCellActorsArray.Remove(Cell);
 }
 
 void ATest_GridActor::SpawnCells()

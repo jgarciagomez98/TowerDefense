@@ -47,11 +47,13 @@ public:
 	UFUNCTION(CallInEditor, Category="Grid Generation")
 	void CollapseAllCells();
 	UFUNCTION(CallInEditor, Category="Grid Generation")
-	void CollapseOneCells();
+	void CollapseOneCell();
 
 private:
 
 	void SpawnCells();
+
+	void CollapseCell(ATest_CellActor* Cell);
 
 	void ClearData();
 
