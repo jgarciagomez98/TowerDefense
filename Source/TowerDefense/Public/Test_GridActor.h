@@ -29,7 +29,8 @@ public:
 	FVector CellSize;
 
 private:
-	TArray<ATest_CellActor*> CellActorsArray;
+	TArray<ATest_CellActor*> UnCollapsedCellActorsArray;
+	TArray<ATest_CellActor*> CollapsedCellActorsArray;
 
 protected:
 	// Called when the game starts or when spawned
@@ -44,7 +45,9 @@ public:
 	UFUNCTION(CallInEditor, Category="Grid Generation")
 	void RemoveGrid();
 	UFUNCTION(CallInEditor, Category="Grid Generation")
-	void CollapseCells();
+	void CollapseAllCells();
+	UFUNCTION(CallInEditor, Category="Grid Generation")
+	void CollapseOneCells();
 
 private:
 

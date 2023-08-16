@@ -43,12 +43,28 @@ void ATest_GridActor::RemoveGrid()
 	ClearData();
 }
 
-void ATest_GridActor::CollapseCells()
+void ATest_GridActor::CollapseAllCells()
 {
-	if (!CellActorsArray.IsEmpty())
+	//TODO: Make loop for collapse all cells
+}
+
+void ATest_GridActor::CollapseOneCells()
+{
+	if (!UnCollapsedCellActorsArray.IsEmpty())
 	{
-		const uint8 Index = FMath::RandRange(0, CellActorsArray.Num() - 1);
-		CellActorsArray[Index]->CollapseCell();
+		//Find random cell and collapse
+		const uint8 Index = FMath::RandRange(0, UnCollapsedCellActorsArray.Num() - 1);
+		UnCollapsedCellActorsArray[Index]->CollapseCell();
+
+		//Add collapsed cell to CollapsedCellActorsArray
+		CollapsedCellActorsArray.Add(UnCollapsedCellActorsArray[Index]);
+
+		//Remove collapsed cell from UnCollapsedCellActorsArray
+		UnCollapsedCellActorsArray.RemoveAt(Index);
+	}
+	else
+	{
+		UE_LOG(LogTemp, Log, TEXT("All cells are collapsed"));
 	}
 }
 
@@ -72,7 +88,7 @@ void ATest_GridActor::SpawnCells()
 						NewCell->DrawDebugBoxHelper(CellSize);
 					}
 					//Add cell to array
-					CellActorsArray.Add(NewCell);
+					UnCollapsedCellActorsArray.Add(NewCell);
 				}
 				else
 				{
@@ -94,15 +110,30 @@ void ATest_GridActor::ClearData()
 	
 	//Clear Cells array
 	RemoveAllCellsFromWorld();
-	CellActorsArray.Empty();
 }
 
 void ATest_GridActor::RemoveAllCellsFromWorld()
 {
-	for (ATest_CellActor* Cell : CellActorsArray)
+	//Remove cells from UnCollapsedCellActorsArray
+	if (!UnCollapsedCellActorsArray.IsEmpty())
 	{
-		Cell->ClearAllSpawnedTiles();
-		Cell->Destroy();
+		for (ATest_CellActor* Cell : UnCollapsedCellActorsArray)
+		{
+			Cell->ClearAllSpawnedTiles();
+			Cell->Destroy();
+		}
+		UnCollapsedCellActorsArray.Empty();
+	}
+
+	//Remove cells from CollapsedCellActorsArray
+	if (!CollapsedCellActorsArray.IsEmpty())
+	{
+		for (ATest_CellActor* Cell : CollapsedCellActorsArray)
+		{
+			Cell->ClearAllSpawnedTiles();
+			Cell->Destroy();
+		}
+		CollapsedCellActorsArray.Empty();
 	}
 }
 
