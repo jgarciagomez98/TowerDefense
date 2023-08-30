@@ -58,11 +58,12 @@ void AGridGenerator::SpawnCells()
 				if (AActor* NewActor = GetWorld()->SpawnActor<AActor>(ACellActor::StaticClass(), CellLocation, FRotator(0.f, 0.f, 0.f)))
 				{
 					ACellActor* NewCell = Cast<ACellActor>(NewActor);
-
 					if (bShowDebugBounds)
 					{
 						NewCell->DrawDebugBounds(CellSize);
 					}
+
+					NewCell->InitializeCell(FIntVector(i, j, k));
 
 					//Add new cells to array
 					CellActorsArray.Add(NewCell);

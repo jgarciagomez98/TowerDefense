@@ -21,6 +21,9 @@ public:
 	UPROPERTY(EditAnywhere)
 	USceneComponent* DefaultRoot;
 
+private:
+	FIntVector GridPositionIndex;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -30,5 +33,13 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	void DrawDebugBounds(const FVector& CellSize) const;
+
+	void InitializeCell();
+	
+	void InitializeCell(FIntVector GridIndex);
+
+	void SetGridPositionIndex(FIntVector index);
+
+	FIntVector GetGridPositionIndex() const;
 
 };

@@ -34,3 +34,23 @@ void ACellActor::DrawDebugBounds(const FVector& CellSize) const
 	DrawDebugBox(GetWorld(), DebugBoxLocation, CellSize, FColor::Red, true, -1, 0, 2);
 }
 
+void ACellActor::InitializeCell()
+{
+	InitializeCell(FIntVector(0,0,0));
+}
+
+void ACellActor::InitializeCell(FIntVector GridIndex)
+{
+	GridPositionIndex = GridIndex;
+}
+
+void ACellActor::SetGridPositionIndex(FIntVector index)
+{
+	GridPositionIndex = index;
+}
+
+FIntVector ACellActor::GetGridPositionIndex() const
+{
+	return GridPositionIndex;
+}
+
