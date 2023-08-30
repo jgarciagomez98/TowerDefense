@@ -14,6 +14,12 @@ class TOWERDEFENSE_API ACellActor : public AActor
 public:	
 	// Sets default values for this actor's properties
 	ACellActor();
+	
+	/**
+	 * It's necessary to set default root if you want to spawn any actor using GetWorld()->SpawnActor in other class
+	 */
+	UPROPERTY(EditAnywhere)
+	USceneComponent* DefaultRoot;
 
 protected:
 	// Called when the game starts or when spawned
@@ -22,5 +28,7 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
+	void DrawDebugBounds(const FVector& CellSize) const;
 
 };

@@ -8,6 +8,9 @@ ACellActor::ACellActor()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+	
+	DefaultRoot = CreateDefaultSubobject<USceneComponent>(TEXT("DefaultRoot"));
+	SetRootComponent(DefaultRoot);
 
 }
 
@@ -23,5 +26,11 @@ void ACellActor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+}
+
+void ACellActor::DrawDebugBounds(const FVector& CellSize) const
+{
+	const FVector DebugBoxLocation = FVector(GetActorLocation().X, GetActorLocation().Y, GetActorLocation().Z);
+	DrawDebugBox(GetWorld(), DebugBoxLocation, CellSize, FColor::Red, true, -1, 0, 2);
 }
 
