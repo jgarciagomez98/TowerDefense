@@ -3,6 +3,7 @@
 
 #include "TowerDefense/Public/MapGeneration_V2/GridGenerator.h"
 
+#include "MapGeneration_V2/DataTableExtractionDataLibrary.h"
 #include "TowerDefense/Public/MapGeneration_V2/CellActor.h"
 
 // Sets default values
@@ -35,6 +36,7 @@ void AGridGenerator::Tick(float DeltaTime)
 void AGridGenerator::GenerateGrid()
 {
 	ClearData();
+	GetTilesFromDataTable();
 	SpawnCells();
 }
 
@@ -63,6 +65,7 @@ void AGridGenerator::SpawnCells()
 						NewCell->DrawDebugBounds(CellSize);
 					}
 
+					//TODO: Pass the array of tiles from data table
 					NewCell->InitializeCell(FIntVector(i, j, k));
 
 					//Add new cells to array
@@ -93,5 +96,10 @@ void AGridGenerator::ClearData()
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Cell actors array size: %d"), CellActorsArray.Num());
 	}
+}
+
+void AGridGenerator::GetTilesFromDataTable()
+{
+	TileStructArray = UDataTableExtractionDataLibrary::GetRowsFromDataTable<FTileStruct>(TilesDataTable);
 }
 

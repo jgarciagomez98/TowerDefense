@@ -4,6 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "CellActor.h"
+#include "FTileStruct.h"
+#include "Engine/DataTable.h"
 #include "GameFramework/Actor.h"
 #include "GridGenerator.generated.h"
 
@@ -22,9 +24,12 @@ public:
 	FVector CellSize;
 	UPROPERTY(EditAnywhere, Category="Grid generation")
 	bool bShowDebugBounds;
+	UPROPERTY(EditAnywhere, Category="Grid generation")
+	UDataTable* TilesDataTable;
 
 private:
 	TArray<ACellActor*> CellActorsArray;
+	TArray<FTileStruct*> TileStructArray;
 	
 
 protected:
@@ -43,5 +48,6 @@ public:
 private:
 	void SpawnCells();
 	void ClearData();
+	void GetTilesFromDataTable();
 
 };
