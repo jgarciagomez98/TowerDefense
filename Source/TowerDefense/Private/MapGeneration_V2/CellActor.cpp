@@ -36,12 +36,13 @@ void ACellActor::DrawDebugBounds(const FVector& CellSize) const
 
 void ACellActor::InitializeCell()
 {
-	InitializeCell(FIntVector(0,0,0));
+	InitializeCell(FIntVector(0,0,0), {});
 }
 
-void ACellActor::InitializeCell(FIntVector GridIndex)
+void ACellActor::InitializeCell(FIntVector GridIndex, const TArray<FTileStruct*>& TilesStructArray)
 {
 	GridPositionIndex = GridIndex;
+	FillTilesArray(TilesStructArray);
 }
 
 void ACellActor::SetGridPositionIndex(FIntVector index)
@@ -52,5 +53,49 @@ void ACellActor::SetGridPositionIndex(FIntVector index)
 FIntVector ACellActor::GetGridPositionIndex() const
 {
 	return GridPositionIndex;
+}
+
+void ACellActor::ClearTiles()
+{
+	for (ATileActor* Tiles : TilesArray)
+	{
+		Tiles->Destroy();
+	}
+	TilesArray.Empty();
+}
+
+void ACellActor::FillTilesArray(TArray<FTileStruct*> TilesStructArray)
+{
+	for (FTileStruct* Tile : TilesStructArray)
+	{
+		ATileActor* NewTileActor;
+		
+		if (Tile->RotationVariants == 0)
+		{
+			NewTileActor = GetWorld()->SpawnActor<ATileActor>(ATileActor::StaticClass(), GetActorLocation(), FRotator(0,0,0));
+			NewTileActor->SetTileProperties(Tile);
+			TilesArray.Add(NewTileActor);
+		}
+		else
+		{
+			//TODO: When tile has rotation variants generate this rotations by code and add to tiles array
+			for (int i = 1; i <= Tile->RotationVariants; i++)
+			{
+				FString TileName = Tile->Name.ToString() + "_" + FString::FromInt(i);
+				/*TODO:
+				 * Rotate sockets in clockwise direction
+				 * Rotate actor in 90 degrees for every rotation variant (1 --> 90, 2 --> 180 ...)
+				 */
+				FTileStruct* NewTileStruct =  new FTileStruct(-1, FName(*TileName), Tile->Mesh, -1, {});
+				FVector NewTileLocation = FVector(GetActorLocation().X, GetActorLocation().Y, GetActorLocation().Z + 100);
+				
+				NewTileActor = GetWorld()->SpawnActor<ATileActor>(ATileActor::StaticClass(), NewTileLocation, FRotator(0,0,0));
+				NewTileActor->SetTileProperties(NewTileStruct);
+				TilesArray.Add(NewTileActor);
+			}
+		}
+	}
+
+	// UE_LOG(LogTemp, Log, TEXT("The tiles rotation are: %s"), *TilesArray[1]->GetActorRotation().ToString());
 }
 

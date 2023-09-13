@@ -64,9 +64,8 @@ void AGridGenerator::SpawnCells()
 					{
 						NewCell->DrawDebugBounds(CellSize);
 					}
-
-					//TODO: Pass the array of tiles from data table
-					NewCell->InitializeCell(FIntVector(i, j, k));
+					
+					NewCell->InitializeCell(FIntVector(i, j, k), TileStructArray);
 
 					//Add new cells to array
 					CellActorsArray.Add(NewCell);
@@ -88,6 +87,7 @@ void AGridGenerator::ClearData()
 	{
 		for (const auto Cell : CellActorsArray)
 		{
+			Cell->ClearTiles();
 			Cell->Destroy();
 		}
 		CellActorsArray.Empty();

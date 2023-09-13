@@ -3,6 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "FTileStruct.h"
+#include "TileActor.h"
 #include "GameFramework/Actor.h"
 #include "CellActor.generated.h"
 
@@ -23,6 +25,7 @@ public:
 
 private:
 	FIntVector GridPositionIndex;
+	TArray<ATileActor*> TilesArray;
 
 protected:
 	// Called when the game starts or when spawned
@@ -36,10 +39,15 @@ public:
 
 	void InitializeCell();
 	
-	void InitializeCell(FIntVector GridIndex);
+	void InitializeCell(FIntVector GridIndex, const TArray<FTileStruct*>& TilesStructArray);
 
 	void SetGridPositionIndex(FIntVector index);
 
 	FIntVector GetGridPositionIndex() const;
+
+	void ClearTiles();
+
+private:
+	void FillTilesArray(TArray<FTileStruct*> TilesStructArray);
 
 };
