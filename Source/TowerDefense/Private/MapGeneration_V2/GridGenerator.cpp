@@ -69,6 +69,9 @@ void AGridGenerator::SpawnCells()
 
 					//Add new cells to array
 					CellActorsArray.Add(NewCell);
+
+					//Add cells into a folder in world outliner
+					NewCell->SetFolderPath("/Cells");
 				}
 				else
 				{

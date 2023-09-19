@@ -28,6 +28,22 @@ void ATileActor::Tick(float DeltaTime)
 
 }
 
+void ATileActor::RotateTile(uint8 RotationVariants)
+{
+	const FQuat YawRotation(FVector::UpVector, HALF_PI * RotationVariants);
+	TileMesh->SetWorldRotation(YawRotation);
+
+	TArray<FString> NewSockets;
+	NewSockets.Init("", TileSockets.Num());
+	const uint8 Lenght = TileSockets.Num();
+	
+	for (int i = 0; i < Lenght; i++)
+	{
+		NewSockets[i] = TileSockets[(i - RotationVariants + Lenght) % Lenght];
+	}
+	TileSockets = NewSockets;
+}
+
 void ATileActor::SetTileProperties(const FTileStruct* TileStruct)
 {
 	TileName = TileStruct->Name;

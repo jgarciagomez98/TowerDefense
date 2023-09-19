@@ -29,8 +29,9 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	void RotateTile(uint8 RotationVariants);
+	
 	void SetTileProperties(const FTileStruct* TileStruct);
 	FName GetTileName() const;
 	
-
 };

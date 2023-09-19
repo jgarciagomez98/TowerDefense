@@ -68,34 +68,35 @@ void ACellActor::FillTilesArray(TArray<FTileStruct*> TilesStructArray)
 {
 	for (FTileStruct* Tile : TilesStructArray)
 	{
-		ATileActor* NewTileActor;
+		ATileActor* NewTileActor = GetWorld()->SpawnActor<ATileActor>(ATileActor::StaticClass(),
+				GetActorLocation(),
+				FRotator(0,0,0));
 		
-		if (Tile->RotationVariants == 0)
+		NewTileActor->SetTileProperties(Tile);
+		TilesArray.Add(NewTileActor);
+		
+		if (Tile->RotationVariants > 0)
 		{
-			NewTileActor = GetWorld()->SpawnActor<ATileActor>(ATileActor::StaticClass(), GetActorLocation(), FRotator(0,0,0));
-			NewTileActor->SetTileProperties(Tile);
-			TilesArray.Add(NewTileActor);
-		}
-		else
-		{
-			//TODO: When tile has rotation variants generate this rotations by code and add to tiles array
 			for (int i = 1; i <= Tile->RotationVariants; i++)
 			{
-				FString TileName = Tile->Name.ToString() + "_" + FString::FromInt(i);
-				/*TODO:
-				 * Rotate sockets in clockwise direction
-				 * Rotate actor in 90 degrees for every rotation variant (1 --> 90, 2 --> 180 ...)
-				 */
-				FTileStruct* NewTileStruct =  new FTileStruct(-1, FName(*TileName), Tile->Mesh, -1, {});
-				FVector NewTileLocation = FVector(GetActorLocation().X, GetActorLocation().Y, GetActorLocation().Z + 100);
+				const FName TileName = FName(Tile->Name.ToString() + "_" + FString::FromInt(i));
+				const FTileStruct* NewTileStruct =  new FTileStruct(Tile->ID, TileName, Tile->Mesh, Tile->RotationVariants, Tile->Sockets);
 				
-				NewTileActor = GetWorld()->SpawnActor<ATileActor>(ATileActor::StaticClass(), NewTileLocation, FRotator(0,0,0));
+				NewTileActor = GetWorld()->SpawnActor<ATileActor>(ATileActor::StaticClass(),
+				FVector(GetActorLocation().X, GetActorLocation().Y, (GetActorLocation().Z + 100) * i),
+				FRotator(0,0,0));
+				
 				NewTileActor->SetTileProperties(NewTileStruct);
+				NewTileActor->RotateTile(i);
 				TilesArray.Add(NewTileActor);
+
+				//Add tiles into a folder in world outliner
+				NewTileActor->SetFolderPath("/Tiles");
 			}
 		}
+		
+		//Add tiles into a folder in world outliner
+		NewTileActor->SetFolderPath("/Tiles");
 	}
-
-	// UE_LOG(LogTemp, Log, TEXT("The tiles rotation are: %s"), *TilesArray[1]->GetActorRotation().ToString());
 }
 
