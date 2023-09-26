@@ -44,10 +44,12 @@ public:
 	void GenerateGrid();
 	UFUNCTION(CallInEditor, Category="Grid generation")
 	void ClearGrid();
+	UFUNCTION(CallInEditor, Category="Grid generation")
+	void CollapseGrid();
 
 private:
 	void SpawnCells();
 	void ClearData();
 	void GetTilesFromDataTable();
-
+	void CollapseSpawnTile();
 };

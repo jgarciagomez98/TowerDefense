@@ -17,9 +17,20 @@ public:
 	ATileActor();
 
 private:
+	//TODO: Remove UPROPERTY after testing
+	UPROPERTY(VisibleAnywhere, Category="Debug")
 	FName TileName;
+	//TODO: Remove UPROPERTY after testing
+	UPROPERTY(VisibleAnywhere, Category="Debug")
 	UStaticMeshComponent* TileMesh;
+	//TODO: Remove UPROPERTY after testing
+	UPROPERTY(VisibleAnywhere, Category="Debug")
 	TArray<FString> TileSockets;
+	//TODO: Remove UPROPERTY after testing
+	UPROPERTY(VisibleAnywhere, Category="Debug")
+	ETileType TileType;
+
+	FTileStruct* TileStruct;
 
 protected:
 	// Called when the game starts or when spawned
@@ -31,7 +42,15 @@ public:
 
 	void RotateTile(uint8 RotationVariants);
 	
-	void SetTileProperties(const FTileStruct* TileStruct);
+	void SetTileProperties(FTileStruct* Struct);
+	
 	FName GetTileName() const;
 	
+	UStaticMeshComponent* GetTileMesh() const;
+	
+	TArray<FString> GetTileSockets() const;
+	
+	ETileType GetTileType() const;
+
+	FTileStruct* GetTileStruct() const;
 };

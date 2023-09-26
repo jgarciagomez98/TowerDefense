@@ -45,6 +45,15 @@ void AGridGenerator::ClearGrid()
 	ClearData();
 }
 
+void AGridGenerator::CollapseGrid()
+{
+	if (!CellActorsArray.IsEmpty())
+	{
+		//First of all collapse one random cell as spawn tile
+		CollapseSpawnTile();
+	}
+}
+
 void AGridGenerator::SpawnCells()
 {
 	for (int i = 0; i < GridSize.X; i++)
@@ -104,5 +113,10 @@ void AGridGenerator::ClearData()
 void AGridGenerator::GetTilesFromDataTable()
 {
 	TileStructArray = UDataTableExtractionDataLibrary::GetRowsFromDataTable<FTileStruct>(TilesDataTable);
+}
+
+void AGridGenerator::CollapseSpawnTile()
+{
+	CellActorsArray[FMath::RandRange(0, CellActorsArray.Num() - 1)]->CollapseCell(ETileType::Spawn);
 }
 

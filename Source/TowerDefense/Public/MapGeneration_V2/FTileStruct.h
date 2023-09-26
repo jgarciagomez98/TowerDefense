@@ -1,5 +1,6 @@
 #pragma once
 
+#include "ETileType.h"
 #include "Engine/DataTable.h"
 #include "FTileStruct.generated.h"
 
@@ -18,17 +19,20 @@ struct FTileStruct : public FTableRowBase
 	int32 RotationVariants;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TArray<FString> Sockets;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	ETileType TileType;
 
-	FTileStruct (): ID(0), Name(TEXT("")), Mesh(nullptr), RotationVariants(0)
+	FTileStruct (): ID(0), Name(TEXT("")), Mesh(nullptr), RotationVariants(0), TileType()
 	{
 	}
 
-	FTileStruct(int32 ID, FName Name, UStaticMesh* Mesh, int32 RotationVariants, TArray<FString> Sockets)
+	FTileStruct(int32 ID, FName Name, UStaticMesh* Mesh, int32 RotationVariants, TArray<FString> Sockets, ETileType TileType)
 	{
 		this->ID = ID;
 		this->Name = Name;
 		this->Mesh = Mesh;
 		this->RotationVariants = RotationVariants;
 		this->Sockets = Sockets;
+		this->TileType = TileType;
 	}
 };

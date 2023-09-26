@@ -25,7 +25,11 @@ public:
 
 private:
 	FIntVector GridPositionIndex;
+	//TODO: Remove UPROPERTY after testing
+	UPROPERTY(VisibleAnywhere, Category="Tiles properties")
 	TArray<ATileActor*> TilesArray;
+	bool IsCollapsed;
+	
 
 protected:
 	// Called when the game starts or when spawned
@@ -45,9 +49,17 @@ public:
 
 	FIntVector GetGridPositionIndex() const;
 
+	void CollapseCell(ETileType TileType);
+
 	void ClearTiles();
+
+	void CollapseCell();
+
+	bool GetIsCollapsed() const;
 
 private:
 	void FillTilesArray(TArray<FTileStruct*> TilesStructArray);
+
+	ATileActor* SpawnTileInWorld(const ATileActor* Tile) const;
 
 };

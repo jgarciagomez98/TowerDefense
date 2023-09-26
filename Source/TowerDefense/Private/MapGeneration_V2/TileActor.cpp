@@ -44,16 +44,40 @@ void ATileActor::RotateTile(uint8 RotationVariants)
 	TileSockets = NewSockets;
 }
 
-void ATileActor::SetTileProperties(const FTileStruct* TileStruct)
+void ATileActor::SetTileProperties(FTileStruct* Struct)
 {
+	this->TileStruct = Struct;
+	
 	TileName = TileStruct->Name;
 	TileMesh->SetStaticMesh(TileStruct->Mesh);
 	TileMesh->SetWorldScale3D(FVector(10, 10, 10));
 	TileSockets = TileStruct->Sockets;
+	TileType = TileStruct->TileType;
 }
 
 FName ATileActor::GetTileName() const
 {
 	return TileName;
 }
+
+UStaticMeshComponent* ATileActor::GetTileMesh() const
+{
+	return TileMesh;
+}
+
+TArray<FString> ATileActor::GetTileSockets() const
+{
+	return TileSockets;
+}
+
+ETileType ATileActor::GetTileType() const
+{
+	return TileType;
+}
+
+FTileStruct* ATileActor::GetTileStruct() const
+{
+	return TileStruct;
+}
+
 
